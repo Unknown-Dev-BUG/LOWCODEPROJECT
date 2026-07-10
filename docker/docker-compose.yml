@@ -99,6 +99,7 @@ services:
       TENANT_ID: default
       MIGRATIONS_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
       GLOBAL_S3_BUCKET: stub
+      REGION: us-east-1
     volumes:
       - supabase_storage_data:/var/tmp/storage
     restart: always
