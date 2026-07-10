@@ -88,23 +88,9 @@
     "vitest": "^3.2.6",
     "wait-on": "^7.0.1"
   },
-  "packageManager": "pnpm@9.4.0+sha256.b6fd0bfda555e7e584ad7e56b30c68b01d5a04f9ee93989f4b93ca8473c49c74",
+  "packageManager": "pnpm@10.34.3",
   "engines": {
     "node": ">=18",
     "pnpm": ">=9"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "@changesets/git@3.0.0": "patches/@changesets__git@3.0.0.patch"
-    },
-    "overrides": {
-      "ws@>=8.0.0 <8.21.0": ">=8.21.0",
-      "ws@>=7.0.0 <7.5.11": ">=7.5.11",
-      "form-data": "4.0.6",
-      "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5",
-      "cross-spawn@<6.0.6": ">=6.0.6",
-      "tmp@<0.2.6": ">=0.2.6",
-      "qs@>=6.7.0 <6.15.2": ">=6.15.2"
-    }
   }
 }

@@ -9,9 +9,8 @@ packages:
   - "!examples/with-nextjs-headless"
   - "!examples/store"
 
-# Config below is duplicated in package.json's `pnpm` field. pnpm 10+ reads it
-# from here (the `pnpm` field in package.json is ignored); pnpm 9 reads it from
-# package.json. Keep both in sync so security overrides apply on any pnpm version.
+# Security overrides for vulnerable transitive dependencies (pnpm 10+ reads
+# settings from here, not from the package.json `pnpm` field).
 overrides:
   "ws@>=8.0.0 <8.21.0": ">=8.21.0"
   "ws@>=7.0.0 <7.5.11": ">=7.5.11"
@@ -20,6 +19,11 @@ overrides:
   "cross-spawn@<6.0.6": ">=6.0.6"
   "tmp@<0.2.6": ">=0.2.6"
   "qs@>=6.7.0 <6.15.2": ">=6.15.2"
+  # critical advisories — patch-safe bumps within the same major
+  "handlebars@<4.7.9": ">=4.7.9"
+  "shell-quote@<1.8.4": ">=1.8.4"
+  "next@>=15.0.0 <15.3.6": ">=15.3.6 <16.0.0"
+  "@remix-run/node@>=2.0.0 <2.17.2": ">=2.17.2"
 
 patchedDependencies:
   "@changesets/git@3.0.0": patches/@changesets__git@3.0.0.patch
