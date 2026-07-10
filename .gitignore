@@ -44,3 +44,8 @@ examples/**/package-lock.json
 
 # Local Netlify folder
 .netlify
+
+# Supabase Local Development
+supabase/.temp/
+supabase/functions/**/.env
+
