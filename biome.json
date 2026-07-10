@@ -107,7 +107,7 @@
         "noDuplicateJsxProps": "error",
         "noDuplicateObjectKeys": "error",
         "noEmptyInterface": "error",
-        "noExplicitAny": "off",
+        "noExplicitAny": "error",
         "noFallthroughSwitchClause": "error",
         "noGlobalIsNan": "error",
         "noImplicitAnyLet": "off",
