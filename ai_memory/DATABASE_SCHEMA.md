@@ -102,6 +102,7 @@ ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 เพื่อให้ได้ระดับความปลอดภัยตามมาตรฐานสากล (Global Standard) เราจะตั้งค่าการปกป้องข้อมูลในตารางดังนี้:
 
 ### กฎสำหรับตารางเอกสาร (Documents Table Policies)
+
 1. **Admin มองเห็นทั้งหมด**: บัญชีที่เป็น `role = 'admin'` สามารถดู แก้ไข และลบเอกสารทุกตัวของทุกแผนกได้
 2. **User มองเห็นเฉพาะแผนกตัวเอง**: บัญชีทั่วไปมองเห็นและแก้ไขได้เฉพาะไฟล์ที่คอลัมน์ `department` ตรงกับ `department` ของบัญชีตนเองเท่านั้น
    ```sql
@@ -113,8 +114,10 @@ ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
    ```
 
 ### กฎสำหรับตารางประวัติกิจกรรม (Audit Logs Policies)
+
 1. **Admin อ่านประวัติได้ทั้งหมด**: เพื่อควบคุมดูแลภาพรวมความปลอดภัย
 2. **ห้าม User หรือผู้พัฒนาแก้ไข Log**: ตั้งนโยบายให้ Log สามารถ **เขียนเข้าได้เท่านั้น (INSERT Only)** ห้ามแก้ ห้ามลบ เพื่อคงความโปร่งใสของประวัติ (Tamper-proof logs)
+
    ```sql
    -- อนุญาตให้เพิ่มประวัติล็อกได้เท่านั้น ห้ามแก้/ห้ามลบ
    CREATE POLICY "Anyone logged-in can insert logs" ON public.audit_logs
