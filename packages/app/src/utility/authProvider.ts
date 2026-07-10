@@ -21,6 +21,25 @@ export const authProvider: AuthProvider = {
       redirectTo: "/",
     };
   },
+  register: async ({ email, password }) => {
+    const { error } = await supabaseClient.auth.signUp({
+      email,
+      password,
+    });
+    if (error) {
+      return {
+        success: false,
+        error: {
+          name: "Register Error",
+          message: error.message,
+        },
+      };
+    }
+    return {
+      success: true,
+      redirectTo: "/",
+    };
+  },
   logout: async () => {
     const { error } = await supabaseClient.auth.signOut();
     if (error) {
