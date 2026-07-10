@@ -28,3 +28,21 @@
   * สร้าง [docker/Dockerfile](file:///docker/Dockerfile) และ [docker/docker-compose.yml](file:///docker/docker-compose.yml) ในการรันคอนเทนเนอร์ร่วมกันทั้งฝั่งหน้าบ้าน Refine และระบบหลังบ้าน Supabase ย่อยแบบแมนนวล (OpenAPI Kong, Database, Storage, Auth, Studio)
   * จัดทำแผนผังฐานข้อมูลและสิทธิ์ปกป้องข้อมูลแยกตามแผนก (Row Level Security) ลงใน [DATABASE_SCHEMA.md](file:///ai_memory/DATABASE_SCHEMA.md)
   * เขียนสคริปต์อัตโนมัติสำหรับทำแบคอัพฐานข้อมูลเก็บไฟล์ SQL รายวัน [scripts/backup.ps1](file:///scripts/backup.ps1) และแนะแนวทางการกู้คืนไฟล์ลงใน [BACKUP.md](file:///ai_memory/BACKUP.md)
+
+### [2026-07-10] - Schema Deployment & Frontend Scaffolding (โดย AI Antigravity)
+* **การติดตั้งและเปิดใช้งานสแต็กหลังบ้าน (Docker & DB Setup)**:
+  * แก้ไขข้อผิดพลาดด้านตัวแปรสภาพแวดล้อมที่จำเป็นสำหรับ Gotrue Auth (`GOTRUE_SITE_URL`) และ Storage Service (`FILE_SIZE_LIMIT`) ช่วยให้สแต็กรันขึ้นสมบูรณ์
+  * ปรับเปลี่ยนชื่อโปรเจกต์ของ Supabase Studio คอนเทนเนอร์ให้เป็นชื่อ `"LowcodeProject"`
+  * สร้างสคริปต์ SQL Migration [init_schema.sql](file:///scripts/init_schema.sql) ในการสร้างตาราง `profiles`, `documents` และ `audit_logs` พร้อมทั้งใช้นโยบายความปลอดภัยแบบแยกตามแผนก (Row Level Security - RLS Policies) รวม 5 กฎ
+  * ทำการคัดลอกไฟล์ SQL และ Deploy เข้าสู่ระบบจัดการฐานข้อมูล PostgreSQL ในตู้ Docker (`supabase_db`) สำเร็จครบถ้วน
+* **การสร้างและกำหนดแอปพลิเคชันหน้าบ้าน (Frontend App Scaffolding)**:
+  * บิลด์โครงสร้างหน้าบ้านหลักด้วยเครื่องมือ Vite ที่โฟลเดอร์ [packages/app](file:///packages/app) ทำงานบนเทมเพลต React & TypeScript
+  * ผูกความสัมพันธ์การเชื่อมต่อไลบรารี Refine ในระบบ Monorepo ด้วยคำสั่ง `pnpm install --ignore-scripts`
+  * เขียนโค้ดแรปเปอร์ระบบหลักในแอปหน้าบ้าน [App.tsx](file:///packages/app/src/App.tsx) รองรับการเรียกใช้ UI ของ Ant Design ในธีม Midnight Blue / Cyan นีออน พร้อมฟีเจอร์การตรวจสอบสิทธิ์ความปลอดภัยในไฟล์คัสตอม [authProvider.ts](file:///packages/app/src/utility/authProvider.ts)
+  * สร้างชุดเชื่อมต่อข้อมูลกับ Supabase Client ที่ [supabaseClient.ts](file:///packages/app/src/utility/supabaseClient.ts) โดยเชื่อมต่อไปยังพอร์ต Kong API Gateway
+  * ตั้งค่าระบบควบคุมสิ่งแวดล้อมของแอปหน้าบ้าน [packages/app/.env](file:///packages/app/.env) ให้เชื่อมหาฐานข้อมูลในเครื่อง (Localhost)
+  * รันเปิดระบบประมวลผลเว็บแอปพลิเคชัน Dev Server ทำงานอยู่ที่พอร์ต `http://localhost:5173/` สำเร็จ
+* **การแก้ไขความลับของระบบและฐานข้อมูลเครื่อง (Local Secrets Configuration)**:
+  * ปรับแต่งไฟล์ [docker/.env](file:///docker/.env) เพื่อใช้งานข้อมูลเชื่อมต่อบนเครื่องคอมพิวเตอร์เป็น `DATABASE_URL=postgresql://postgres:br_v0123@localhost:5432/postgres` และรหัสผ่าน DB เป็น `br_v0123`
+  * สุ่มคีย์ถอดรหัสความลับระดับ Token (JWT Secret) ความยาว 64 ตัวอักษรป้อนเข้าระบบเป็นที่เรียบร้อย
+
