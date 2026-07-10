@@ -59,6 +59,7 @@ services:
       GOTRUE_JWT_SECRET: ${JWT_SECRET}
       GOTRUE_JWT_EXP: 3600
       API_EXTERNAL_URL: http://localhost:8000
+      GOTRUE_SITE_URL: http://localhost:80
     restart: always
 
   # -------------------------------------------------------------------------
@@ -90,6 +91,11 @@ services:
       POSTGRES_BACKEND_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
       PGRST_JWT_SECRET: ${JWT_SECRET}
       FILE_STORAGE_BACKEND_PATH: /var/tmp/storage
+      PORT: 5000
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      TENANT_ID: default
+      MIGRATIONS_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
     volumes:
       - supabase_storage_data:/var/tmp/storage
     restart: always
@@ -119,7 +125,7 @@ services:
   # -------------------------------------------------------------------------
   supabase-studio:
     container_name: supabase_studio
-    image: supabase/studio:20231120-f509d3c
+    image: supabase/studio:2026.07.07-sha-a6a04f2
     ports:
       - "3000:3000"
     environment:
