@@ -131,6 +131,7 @@ services:
     environment:
       SUPABASE_URL: http://kong:8000
       STUDIO_PG_META_URL: http://supabase-db:5432/postgres
+      DEFAULT_PROJECT_NAME: LowcodeProject
     depends_on:
       - supabase-db
     restart: always
