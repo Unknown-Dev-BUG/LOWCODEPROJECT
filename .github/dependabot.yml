@@ -1,0 +1,17 @@
+# Dependabot configuration to check packages updates weekly
+version: 2
+updates:
+  # Check npm/pnpm package updates
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    # Enable automatic version updates for lockfiles
+    versioning-strategy: "lockfile-only"
+
+  # Check GitHub Actions updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
