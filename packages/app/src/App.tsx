@@ -1,8 +1,8 @@
-import { Refine } from "@refinedev/core";
+import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
-import { RefineThemes, ThemedLayout, useNotificationProvider } from "@refinedev/antd";
+import { AuthPage, ErrorComponent, RefineThemes, ThemedLayout, useNotificationProvider } from "@refinedev/antd";
 import { App as AntdApp, ConfigProvider, theme } from "antd";
-import routerProvider, { NavigateToResource, UnsavedChangesNotifier } from "@refinedev/react-router";
+import routerProvider, { CatchAllNavigate, NavigateToResource, UnsavedChangesNotifier } from "@refinedev/react-router";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import { dataProvider } from "@refinedev/supabase";
 
@@ -51,16 +51,18 @@ function App() {
                 {/* เมนูหลักที่ต้องผ่านสิทธิ์ล็อกอิน */}
                 <Route
                   element={
-                    <ThemedLayout
-                      Title={({ collapsed }) => (
-                        <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "5px" }}>
-                          <img src="/logo.png" alt="Logo" style={{ height: "24px" }} />
-                          {!collapsed && <span style={{ fontWeight: "bold", color: "#00f0ff" }}>LowcodeProject</span>}
-                        </div>
-                      )}
-                    >
-                      <Outlet />
-                    </ThemedLayout>
+                    <Authenticated key="authenticated-routes" fallback={<CatchAllNavigate to="/login" />}>
+                      <ThemedLayout
+                        Title={({ collapsed }) => (
+                          <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "5px" }}>
+                            <img src="/logo.png" alt="Logo" style={{ height: "24px" }} />
+                            {!collapsed && <span style={{ fontWeight: "bold", color: "#00f0ff" }}>LowcodeProject</span>}
+                          </div>
+                        )}
+                      >
+                        <Outlet />
+                      </ThemedLayout>
+                    </Authenticated>
                   }
                 >
                   {/* หน้าเริ่มต้นเมื่อเปิดเข้ามา จะส่งไปหน้ารายการเอกสาร */}
@@ -79,6 +81,22 @@ function App() {
                     </div>
                   } />
                 </Route>
+
+                {/* หน้าเกี่ยวกับ Authentication */}
+                <Route
+                  element={
+                    <Authenticated key="auth-pages" fallback={<Outlet />}>
+                      <NavigateToResource resource="documents" />
+                    </Authenticated>
+                  }
+                >
+                  <Route path="/login" element={<AuthPage type="login" />} />
+                  <Route path="/register" element={<AuthPage type="register" />} />
+                  <Route path="/forgot-password" element={<AuthPage type="forgotPassword" />} />
+                </Route>
+
+                {/* หน้า Error 404 เมื่อไม่พบหน้า */}
+                <Route path="*" element={<ErrorComponent />} />
               </Routes>
               <UnsavedChangesNotifier />
             </Refine>
