@@ -41,6 +41,10 @@ services:
       JWT_SECRET: ${JWT_SECRET:-jwt_secret_change_me}
     volumes:
       - supabase_db_data:/var/lib/postgresql/data
+    networks:
+      default:
+        aliases:
+          - db
     restart: always
 
   # -------------------------------------------------------------------------
@@ -150,7 +154,12 @@ services:
     image: supabase/postgres-meta:v0.96.6
     environment:
       PG_META_PORT: 8080
-      PG_META_DB_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
+      DB_HOST: supabase-db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       - supabase-db
     restart: always
