@@ -135,8 +135,26 @@ services:
       - "3000:3000"
     environment:
       SUPABASE_URL: http://kong:8000
-      STUDIO_PG_META_URL: http://supabase-db:5432/postgres
+      STUDIO_PG_META_URL: http://supabase-pgmeta:8080
       DEFAULT_PROJECT_NAME: LowcodeProject
+    depends_on:
+      - supabase-db
+      - supabase-pgmeta
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 📊 8. Supabase - Postgres Meta (ตัวแปลภาษา SQL ให้หน้าต่าง Studio อ่านง่าย)
+  # -------------------------------------------------------------------------
+  supabase-pgmeta:
+    container_name: supabase_pgmeta
+    image: supabase/postgres-meta:v0.96.6
+    environment:
+      PG_META_PORT: 8080
+      PG_META_DB_HOST: supabase-db
+      PG_META_DB_PORT: 5432
+      PG_META_DB_NAME: postgres
+      PG_META_DB_USER: postgres
+      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       - supabase-db
     restart: always
