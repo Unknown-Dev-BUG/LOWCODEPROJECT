@@ -1,9 +1,10 @@
+import { useState, useEffect } from "react";
 import { Authenticated, Refine } from "@refinedev/core";
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { AuthPage, ErrorComponent, RefineThemes, ThemedLayout, useNotificationProvider } from "@refinedev/antd";
 import { App as AntdApp, ConfigProvider, theme } from "antd";
 import routerProvider, { CatchAllNavigate, NavigateToResource, UnsavedChangesNotifier } from "@refinedev/react-router";
-import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Outlet, Navigate } from "react-router-dom";
 import { dataProvider } from "@refinedev/supabase";
 
 import { supabaseClient } from "./utility/supabaseClient";
@@ -23,6 +24,22 @@ const customTheme = {
 };
 
 function App() {
+  const [hasAdmin, setHasAdmin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // เช็คจำนวน Profile ในตารางเพื่อดูว่ามี Admin คนแรกหรือยัง
+    supabaseClient
+      .from("profiles")
+      .select("id", { count: "exact", head: true })
+      .then(({ count, error }) => {
+        if (!error && count !== null) {
+          setHasAdmin(count > 0);
+        } else {
+          setHasAdmin(false);
+        }
+      });
+  }, []);
+
   return (
     <BrowserRouter>
       <ConfigProvider theme={customTheme}>
@@ -90,8 +107,25 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  <Route path="/login" element={<AuthPage type="login" />} />
-                  <Route path="/register" element={<AuthPage type="register" />} />
+                  <Route 
+                    path="/login" 
+                    element={
+                      <AuthPage 
+                        type="login" 
+                        registerLink={hasAdmin ? false : undefined} 
+                      />
+                    } 
+                  />
+                  <Route 
+                    path="/register" 
+                    element={
+                      hasAdmin ? (
+                        <Navigate to="/login" replace />
+                      ) : (
+                        <AuthPage type="register" />
+                      )
+                    } 
+                  />
                   <Route path="/forgot-password" element={<AuthPage type="forgotPassword" />} />
                 </Route>
 
