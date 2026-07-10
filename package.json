@@ -95,8 +95,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@changesets/git@3.0.0": "patches/@changesets__git@3.0.0.patch",
-      "react95@4.0.0": "patches/react95@4.0.0.patch"
+      "@changesets/git@3.0.0": "patches/@changesets__git@3.0.0.patch"
     },
     "overrides": {
       "ws@>=8.0.0 <8.21.0": ">=8.21.0",

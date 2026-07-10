@@ -8,3 +8,18 @@ packages:
   - "!examples/mern-dashboard-client"
   - "!examples/with-nextjs-headless"
   - "!examples/store"
+
+# Config below is duplicated in package.json's `pnpm` field. pnpm 10+ reads it
+# from here (the `pnpm` field in package.json is ignored); pnpm 9 reads it from
+# package.json. Keep both in sync so security overrides apply on any pnpm version.
+overrides:
+  "ws@>=8.0.0 <8.21.0": ">=8.21.0"
+  "ws@>=7.0.0 <7.5.11": ">=7.5.11"
+  "form-data": "4.0.6"
+  "cross-spawn@>=7.0.0 <7.0.5": ">=7.0.5"
+  "cross-spawn@<6.0.6": ">=6.0.6"
+  "tmp@<0.2.6": ">=0.2.6"
+  "qs@>=6.7.0 <6.15.2": ">=6.15.2"
+
+patchedDependencies:
+  "@changesets/git@3.0.0": patches/@changesets__git@3.0.0.patch
