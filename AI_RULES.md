@@ -80,6 +80,7 @@
 - 🛡️ **[คู่มือการตรวจสอบความปลอดภัยของโค้ด](file:///ai_memory/security-auditor.md)** (แนวทางป้องกัน OWASP Top 10, Auth, Access Control, Data Flow)
 - 🤖 **[คู่มือพัฒนาฟังก์ชันร่วมกับ Gemini API](file:///ai_memory/gemini-api-dev.md)** (การเรียกโมเดลล่าสุด, โครงสร้าง SDK ใหม่)
 - 🗄️ **[คู่มือการออกแบบฐานข้อมูลที่ดี](file:///ai_memory/database-design.md)** (การทำ Schema, ดัชนี, RLS ใน Supabase)
+- 🗺️ **[โครงสร้างตารางฐานข้อมูลและล็อกประวัติ (DATABASE_SCHEMA.md)](file:///ai_memory/DATABASE_SCHEMA.md)** (ER-Diagram, โครงสร้าง SQL DDL, นโยบาย RLS ความปลอดภัยแยกแผนก)
 - 🌐 **[คู่มือออกแบบช่องทางสื่อสาร (API Patterns)](file:///ai_memory/api-patterns.md)** (โครงสร้าง API, การเขียน Endpoint ที่ปลอดภัย)
 - 📦 **[คู่มือและประวัติแพ็กเกจย่อยในระบบ (PACKAGES.md)](file:///ai_memory/PACKAGES.md)** (สเปกแพ็กเกจหลัก, หน้าที่การทำงาน, วันสร้าง/แก้ไขล่าสุด)
 - ⚙️ **[คู่มือการจัดการเวอร์ชันของระบบ (VERSIONING.md)](file:///ai_memory/VERSIONING.md)** (ขั้นตอนและคำสั่งอัปเดตเวอร์ชันโครงการ)
