@@ -150,11 +150,7 @@ services:
     image: supabase/postgres-meta:v0.96.6
     environment:
       PG_META_PORT: 8080
-      PG_META_DB_HOST: supabase-db
-      PG_META_DB_PORT: 5432
-      PG_META_DB_NAME: postgres
-      PG_META_DB_USER: postgres
-      PG_META_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      PG_META_DB_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
     depends_on:
       - supabase-db
     restart: always
