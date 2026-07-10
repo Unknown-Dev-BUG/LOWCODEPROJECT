@@ -72,6 +72,9 @@
 โปรดศึกษาและปฏิบัติตามคู่มือระดับมืออาชีพอย่างเคร่งครัด:
 * 📘 **[คู่มือการเขียน TypeScript คุณภาพสูง](file:///ai_memory/typescript-pro.md)** (ห้ามใช้ `any`, เน้น Generic/Type safety)
 * 🛡️ **[คู่มือการตรวจสอบความปลอดภัยของโค้ด](file:///ai_memory/security-auditor.md)** (แนวทางป้องกัน OWASP Top 10, Auth, Access Control, Data Flow)
+* 🤖 **[คู่มือพัฒนาฟังก์ชันร่วมกับ Gemini API](file:///ai_memory/gemini-api-dev.md)** (การเรียกโมเดลล่าสุด, โครงสร้าง SDK ใหม่)
+* 🗄️ **[คู่มือการออกแบบฐานข้อมูลที่ดี](file:///ai_memory/database-design.md)** (การทำ Schema, ดัชนี, RLS ใน Supabase)
+* 🌐 **[คู่มือออกแบบช่องทางสื่อสาร (API Patterns)](file:///ai_memory/api-patterns.md)** (โครงสร้าง API, การเขียน Endpoint ที่ปลอดภัย)
 
 เพื่อป้องกันการเขียนโค้ดที่ไม่ปลอดภัยหรือโค้ดที่ไม่มีคุณภาพ AI ทุกตัวต้องปฏิบัติตามมาตรฐานนี้:
 
