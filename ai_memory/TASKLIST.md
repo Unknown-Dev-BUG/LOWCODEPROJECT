@@ -7,7 +7,7 @@
 ## 📋 สถานะภาพรวมโครงการ (Project Status)
 
 - [x] **Phase 1: Project Setup & Identity Customize** (เสร็จสิ้น)
-- [ ] **Phase 2: Database Schema & Local Supabase Setup** (กำลังดำเนินการ / รอดำเนินการ)
+- [x] **Phase 2: Database Schema & Local Supabase Setup** (เสร็จสิ้นการตั้งค่าคอนฟิกและโครงสร้าง / รอดีพลอยเริ่มรัน)
 - [ ] **Phase 3: Gemini AI API Document Extraction Service** (รอดำเนินการ)
 - [ ] **Phase 4: Frontend UI Development (Refine + Ant Design)** (รอดำเนินการ)
 
@@ -22,13 +22,17 @@
 * [x] แก้ไขชื่อแพ็กเกจใน `package.json` เป็น `lowcode-project`
 * [x] ลบโฟลเดอร์ที่ไม่จำเป็น (`examples`, `cypress`, `templates`, `hackathon`) เพื่อป้องกันปัญหาข้อมูลลับหลุด (GitHub Push Protection) และประหยัดเนื้อที่
 * [x] ดึงโฟลเดอร์ `documentation` และ `templates` กลับมาแบบด่วนพิเศษเพื่อให้ใช้ศึกษาและเริ่มโปรเจกต์ได้
-* [x] สร้างและอัปโหลดไฟล์กฎทอง `AI_RULES.md`
-* [x] สร้างระบบบันทึกหน่วยความจำ AI ในโฟลเดอร์ `ai_memory/`
+* [x] สร้างและอัปโหลดไฟล์กฎทอง `AI_RULES.md` พร้อมกำหนดลายเซ็น ASCII Art สไตล์แฮกเกอร์
+* [x] สร้างระบบบันทึกหน่วยความจำ AI ในโฟลเดอร์ `ai_memory/` (มีสารบัญแพ็กเกจ คู่มือเวอร์ชัน และแนวปฏิบัติ Git Branching)
+* [x] ตั้งค่าความปลอดภัยลินเตอร์ห้ามเขียน `any` ลงใน `biome.json` และมี `ci.yml` ช่วยตรวจอัตโนมัติ
 
-### Phase 2: Database Schema & Local Supabase Setup (รอดำเนินการ)
-* [ ] ติดตั้งและเริ่มทำงาน Supabase CLI ในเครื่อง Local
-* [ ] กำหนดตารางข้อมูลใน Supabase สำหรับบันทึกข้อมูลเอกสารที่อัปโหลด และข้อมูลที่ AI ถอดความได้
-* [ ] ทดสอบการเชื่อมต่อ API ระหว่าง Refine และ Supabase Local
+### Phase 2: Database Schema & Local Supabase Setup (เสร็จสิ้นการวางระบบโครงสร้าง)
+* [x] ตรวจสอบและตั้งค่าปิดกั้นไฟล์ระบบและคีย์ความลับของ Supabase ลงใน `.gitignore`
+* [x] เริ่มทำงานของ Supabase ในแบบ Docker ด้วยการรันคำสั่ง `npx supabase init` 
+* [x] ออกแบบและสร้างโครงสร้างฐานข้อมูล [DATABASE_SCHEMA.md](file:///ai_memory/DATABASE_SCHEMA.md) (Profiles, Documents, Audit Logs) พร้อมนโยบายสิทธิ์ความปลอดภัยแยกรายแผนก (RLS)
+* [x] จัดเตรียมระบบแรปเปอร์ครอบคอนเทนเนอร์หน้าบ้านและหลังบ้านด้วย [docker-compose.yml](file:///docker/docker-compose.yml) และ Kong Gateway routing
+* [x] เขียนสคริปต์สำรองข้อมูลอัตโนมัติ [backup.ps1](file:///scripts/backup.ps1) และคู่มือแบคอัพ [BACKUP.md](file:///ai_memory/BACKUP.md) 
+* [ ] สั่งรันเริ่มคอนเทนเนอร์บน Docker Desktop และสร้างตารางจริงในเครื่องฐานข้อมูล
 
 ### Phase 3: Gemini AI API Document Extraction Service (รอดำเนินการ)
 * [ ] สร้างโมดูลหรือฟังก์ชันในการเชื่อมต่อกับ Gemini API
