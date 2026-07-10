@@ -113,6 +113,7 @@ services:
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
       KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_DNS_RESOLVER: 127.0.0.11
     volumes:
       - ./supabase/kong.yml:/etc/kong/kong.yml
     depends_on:
