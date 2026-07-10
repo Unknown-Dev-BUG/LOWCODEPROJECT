@@ -1,0 +1,139 @@
+# =========================================================================
+# 👤 AUTHOR        : Tichakorn Khunyai (Unknown-Dev-BUG)
+# 🏢 PROJECT       : LowcodeProject
+# 📄 FILE          : docker-compose.yml
+# ✍️ DESCRIPTION    : รวมการทำงานของฝั่งหน้าบ้าน (Refine Frontend) 
+#                     และหลังบ้าน (Supabase Local Stack) ให้อยู่ภายใต้ Docker Compose เดียวกัน
+# =========================================================================
+
+version: '3.8'
+
+services:
+  # -------------------------------------------------------------------------
+  # 🌐 1. หน้าบ้าน Refine Frontend Application
+  # -------------------------------------------------------------------------
+  frontend:
+    container_name: lowcode_frontend
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      - VITE_GEMINI_API_KEY=${VITE_GEMINI_API_KEY}
+      - VITE_SUPABASE_URL=http://localhost:8000
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+    depends_on:
+      - kong
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 🗄️ 2. Supabase - Database (PostgreSQL)
+  # -------------------------------------------------------------------------
+  supabase-db:
+    container_name: supabase_db
+    image: supabase/postgres:15.1.1.78
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_password_change_me}
+      JWT_SECRET: ${JWT_SECRET:-jwt_secret_change_me}
+    volumes:
+      - supabase_db_data:/var/lib/postgresql/data
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 🔑 3. Supabase - Auth Service (GoTrue)
+  # -------------------------------------------------------------------------
+  supabase-auth:
+    container_name: supabase_auth
+    image: supabase/gotrue:v2.132.0
+    depends_on:
+      - supabase-db
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres?sslmode=disable
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_EXP: 3600
+      API_EXTERNAL_URL: http://localhost:8000
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 🌐 4. Supabase - PostgREST (REST API)
+  # -------------------------------------------------------------------------
+  supabase-rest:
+    container_name: supabase_rest
+    image: postgrest/postgrest:v11.1.0
+    depends_on:
+      - supabase-db
+    environment:
+      PGRST_DB_URI: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
+      PGRST_DB_SCHEMA: public,storage
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 📦 5. Supabase - Storage Service
+  # -------------------------------------------------------------------------
+  supabase-storage:
+    container_name: supabase_storage
+    image: supabase/storage-api:v0.43.0
+    depends_on:
+      - supabase-db
+    environment:
+      ANON_KEY: ${VITE_SUPABASE_ANON_KEY}
+      SERVICE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      POSTGRES_BACKEND_URL: postgres://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      FILE_STORAGE_BACKEND_PATH: /var/tmp/storage
+    volumes:
+      - supabase_storage_data:/var/tmp/storage
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 🎛️ 6. Supabase - Kong API Gateway (ตัวจัดการแจกเส้นทางพอร์ต)
+  # -------------------------------------------------------------------------
+  kong:
+    container_name: supabase_kong
+    image: kong:2.8.1
+    ports:
+      - "8000:8000"
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /etc/kong/kong.yml
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+    volumes:
+      - ./supabase/kong.yml:/etc/kong/kong.yml
+    depends_on:
+      - supabase-auth
+      - supabase-rest
+      - supabase-storage
+    restart: always
+
+  # -------------------------------------------------------------------------
+  # 🖥️ 7. Supabase - Studio (หน้า Dashboard จัดการข้อมูลหลังบ้าน)
+  # -------------------------------------------------------------------------
+  supabase-studio:
+    container_name: supabase_studio
+    image: supabase/studio:20231120-f509d3c
+    ports:
+      - "3000:3000"
+    environment:
+      SUPABASE_URL: http://kong:8000
+      STUDIO_PG_META_URL: http://supabase-db:5432/postgres
+    depends_on:
+      - supabase-db
+    restart: always
+
+# -------------------------------------------------------------------------
+# 💾 Volumes สำหรับเก็บบันทึกข้อมูลถาวรในเครื่อง
+# -------------------------------------------------------------------------
+volumes:
+  supabase_db_data:
+    driver: local
+  supabase_storage_data:
+    driver: local
